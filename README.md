@@ -1,6 +1,6 @@
 # Color Customizer: Chair
 
-Study of the tutorial "Customizing a 3D Model with React-Three-Fiber"
+Study of the tutorial "Customizing a 3D Model with React-Three-Fiber" using react-three-fiber.
 
 https://avellstudio-mp.medium.com/pavlo-s-keynotes-color-customizer-app-for-a-3d-model-with-react-three-fiber-570621e982ed
 
