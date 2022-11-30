@@ -19,7 +19,7 @@ function App() {
   const selectSwatch = (e) => {
     let color = COLORS[parseInt(e.target.dataset.key)];
     let newMTL;
-    // if (color.texture) {
+    // if (color.texture) { //to change texture
     //   let txt = new THREE.TextureLoader().load(color.texture);
 
     //   txt.repeat.set(color.size[0], color.size[1], color.size[2]);
@@ -35,6 +35,7 @@ function App() {
         color: parseInt("0x" + color.color),
         shininess: color.shininess ? color.shininess : 10
       });
+      console.log(color);
     // }
 
     return setNewMaterialOpt({
