@@ -1,6 +1,9 @@
 import React from "react";
 import * as THREE from "three";
 
+// planeGeometry: represents square
+// meshPhongMaterial: set up options(color, shininess)
+
 const Floor = () => {
     return(
         <mesh
