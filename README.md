@@ -1,8 +1,6 @@
-# Color Customizer: Chair
+# Color Customizer: Any 3D model (.gltf files)
 
-Study of the tutorial "Customizing a 3D Model with React-Three-Fiber" using react-three-fiber.
-
-https://avellstudio-mp.medium.com/pavlo-s-keynotes-color-customizer-app-for-a-3d-model-with-react-three-fiber-570621e982ed
+Upload gltf file of the model you want to color.
 
 
 
