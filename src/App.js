@@ -1,4 +1,3 @@
-
 import './App.css';
 import React, { useState } from "react";
 import * as THREE from "three";
@@ -15,6 +14,30 @@ function App() {
     activeOption,
     newMTL: null
   });
+  const [selectedFile, setSelectedFile] = useState();
+	const [isSelected, setIsSelected] = useState(false);
+
+	const changeHandler = (event) => {
+		setSelectedFile(URL.createObjectURL(event.target.files[0]));//event.target.files[0]);
+		setIsSelected(true);
+	};
+
+	const handleSubmission = () => {
+    const formData = new FormData();
+    formData.append('File', selectedFile);
+    
+  //   fetch('localhost:3000/', {
+  //     method: 'POST',
+  //     body: formData
+  //   })
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       console.log('Success:', result);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error:', error);
+  //     });
+	};
 
   const selectSwatch = (e) => {
     let color = COLORS[parseInt(e.target.dataset.key)];
@@ -48,7 +71,21 @@ function App() {
     <div className="App">
       <header className="App-header">    
       </header>
-
+      <div>
+        <input type="file" name="file" onChange={changeHandler} />
+        {isSelected ? (
+          <div>
+            <p>Filename: {selectedFile.name}</p>
+            <p>Filetype: {selectedFile.type}</p>
+            <p>Size in bytes: {selectedFile.size}</p>
+            {/* <p>lastModifiedDate:{' '}{selectedFile.lastModifiedDate.toLocaleDateString()}</p> */}
+          </div>) : (
+            <p>Select a file to show details</p>)}
+        <div>
+          <button onClick={handleSubmission}>Submit</button>
+           <img src={selectedFile} />
+        </div>
+      </div>
       <OptionsMenu
         activeOption={activeOption}
         setActiveOption={setActiveOption}
