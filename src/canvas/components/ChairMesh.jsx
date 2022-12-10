@@ -33,7 +33,14 @@ const initColor = (parent, type, mtl) => {
 
 const ChairMesh = ({newMaterialOpt}) => {
     // load information about the model in theModel
-    const {scene: theModel} = useLoader(GLTFLoader, "chair.gltf");
+    //const {scene: theModel} = useLoader(GLTFLoader, "chair.gltf");
+    // var filePath ="chair.gltf"
+    // if (newMaterialOpt.fileURL){
+    //     filePath = newMaterialOpt.fileURL
+    //     console.log("been here")
+    //   }
+    const {scene: theModel} = useLoader(GLTFLoader, newMaterialOpt.fileURL);
+    
     const chair = useRef(theModel)
 
     useEffect(() =>

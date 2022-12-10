@@ -30,7 +30,8 @@ export const OptionsMenu = ({activeOption, setActiveOption}) => {
                         onClick={() => setActiveOption(name)}
                         key={name}
                     >
-                        <img src={img} alt=""/>
+                        <p>{name}</p>
+                        {/* <img src={img} alt=""/> */}
                     </div>
                 ))}
             </div>
