@@ -20,10 +20,11 @@ const options = [
         img: "https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/back.svg"},
     ]
 
-export const OptionsMenu = ({activeOption, setActiveOption}) => {
+export const OptionsMenu = ({activeOption, setActiveOption,parts}) => {
         return(
             <div className="options">
-                {options.map(({name, img}, idx) => (
+                {parts.map((name, index) => (
+                //options.map(({name, img}, idx) => (
                     <div
                         className={`option ${activeOption === name ? "--is-active" : ""}`}
                         data-option={name}

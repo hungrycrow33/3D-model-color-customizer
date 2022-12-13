@@ -1,6 +1,7 @@
 import './App.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {Canvas} from "react-three-fiber";
 
 import { Scene } from "./canvas/Scene";
@@ -8,29 +9,46 @@ import { OptionsMenu } from "./components/OptionsMenu";
 import ColorsSlider from "./components/ColorsSlider";
 import { COLORS } from "./constants/colors";
 
+
+// function InputRender(file) {
+//   useEffect(()=>{
+//     setFileURL(URL.createObjectURL(file));
+//   },[setFileURL]);
+// }
+
 function App() {
   const [activeOption, setActiveOption] = useState("legs");
   const [selectedFile, setSelectedFile] = useState(null);
 	const [isSelected, setIsSelected] = useState(false);
-  const [fileURL, setFileURL] = useState("donut.gltf");
+  const [fileURL, setFileURL] = useState("chair.gltf");
+  const [data, setData] = useState(null);
+  const [parts, setParts] = useState([ "legs", "cushions", "back", "supports", "base" ]); // list of distinctive parts to color (layers from the file) 
+
   const [newMaterialOpt, setNewMaterialOpt] = useState({
     activeOption,
     newMTL: null,
     selectedFile,
-    fileURL
+    fileURL,
+    parts
   });
+  // useEffect(()=>{
+  //   setFileURL(URL.createObjectURL(selectedFile));
+  // },[setFileURL, selectedFile]);
   
-  
-  const [parts, setParts] = useState([]); // list of distinctive parts to color (layers from the file) 
-
 	const changeHandler = (event) => {
 		setSelectedFile(event.target.files[0]);//URL.createObjectURL(event.target.files[0])
 		setIsSelected(true);
+    
     setFileURL(URL.createObjectURL(event.target.files[0]));
+
     // const fileReader = new FileReader();
+    //setFileURL(fileReader.readAsDataURL(event.target.files[0]));
+    //setData(fileReader.readAsArrayBuffer(event.target.files[0]));
+    //console.log('data?',JSON.parse(event.target.files[0]));
+
+
     // fileReader.readAsDataURL(selectedFile);
     //setData(JSON.parse(event.target.files[0].result));
-    //console.log("here",URL.createObjectURL(event.target.files[0]));
     
         // console.log("ahhhhhh", JSON.parse(event.target.files[0].result));
 
@@ -49,6 +67,7 @@ function App() {
     
 	};
 
+
   const readImage=(selectedFile)=> {
     // Check if the file is an image.
     if (selectedFile.type && !selectedFile.type.startsWith('image/')) {
@@ -56,14 +75,51 @@ function App() {
       return;
     }
   };
-	const handleSubmission = () => {
-    if (selectedFile.type && !selectedFile.type.startsWith('image/')) {
-      console.log('File is not an image.', selectedFile.type);
+	const handleSubmission = async() => {
+    
+    // var fr = new FileReader();
+    // console.log('this is: ', selectedFile.type);
+    // var stream = selectedFile.stream();
+    // var text = selectedFile.text();
+    //var reader = stream.getReader();
+    //console.log('and this is: ', stream.json()); //.text()
+
+    //stream.json().then((json) => console.log(json));
+
+    var loader = new GLTFLoader();
+
+    loader.load(fileURL, function(gltf){
+      // console.log("secene ",gltf.parser.json.nodes);
+      // console.log("assets",gltf.parser.getDependencies("scenes")[1]);
+      let numParts = gltf.parser.json.nodes.length;
       
-    }
-    else{
-      console.log('eh', selectedFile);
-    }
+      for(let i=0; i<numParts; i++){
+        if(i==0){ // clear the previous array
+          setParts([]);
+        }
+        //console.log("name: ",gltf.parser.json.nodes[i].name);
+        setParts(parts => [...parts, gltf.parser.json.nodes[i].name]);
+      }
+      
+      //gltf.nodes;
+      
+    })
+    return setNewMaterialOpt({
+      activeOption,
+      newMTL:null,
+      selectedFile,
+      fileURL,
+      parts
+    });
+
+
+    // if (selectedFile.type && !selectedFile.type.startsWith('image/')) {
+    //   console.log('File is not an image.', selectedFile.type);
+      
+    // }
+    // else{
+    //   console.log('eh', selectedFile);
+    // }
     // const formData = new FormData();
     // formData.append('File', selectedFile);
     
@@ -80,6 +136,7 @@ function App() {
   //     });
 	};
 
+  // when clicking the color, change the color of the parts 
   const selectSwatch = (e) => {
     let color = COLORS[parseInt(e.target.dataset.key)];
     let newMTL;
@@ -104,7 +161,10 @@ function App() {
 
     return setNewMaterialOpt({
       activeOption,
-      newMTL
+      newMTL,
+      selectedFile,
+      fileURL,
+      parts
     });
   };
 
@@ -120,10 +180,12 @@ function App() {
             <p>Filetype: {selectedFile.type}</p>
             <p>Size in bytes: {selectedFile.size}</p>
             <p>Size in bytes: {selectedFile.dirName}</p>
+           
             {/* <p>lastModifiedDate:{' '}{selectedFile.lastModifiedDate.toLocaleDateString()}</p> */}
           </div>) : (
             <p>Select a file to show details</p>)}
         <div>
+        {parts!=[] ? (<p>array: {parts}</p>):(<p>nada</p>)}
           <button onClick={handleSubmission}>Submit</button>
           
           {/*  <img src={selectedFile} /> */}
@@ -132,6 +194,7 @@ function App() {
       <OptionsMenu
         activeOption={activeOption}
         setActiveOption={setActiveOption}
+        parts = {parts}
       />
 
       <Canvas id ="rtfCanvas">

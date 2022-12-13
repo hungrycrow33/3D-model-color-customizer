@@ -12,13 +12,13 @@ const INITIAL_MTL = new THREE.MeshPhongMaterial({
     shininess: 10
 });
 
-const INITIAL_MAP = [
-    {childID: "back", mtl: INITIAL_MTL},
-    {childID: "base", mtl: INITIAL_MTL},
-    {childID: "cushions", mtl: INITIAL_MTL},
-    {childID: "legs", mtl: INITIAL_MTL},
-    {childID: "supports", mtl: INITIAL_MTL}
-    ];
+// const INITIAL_MAP = [
+//     {childID: "back", mtl: INITIAL_MTL},
+//     {childID: "base", mtl: INITIAL_MTL},
+//     {childID: "cushions", mtl: INITIAL_MTL},
+//     {childID: "legs", mtl: INITIAL_MTL},
+//     {childID: "supports", mtl: INITIAL_MTL}
+//     ];
 
 const initColor = (parent, type, mtl) => {
     parent.traverse(o => {
@@ -29,6 +29,14 @@ const initColor = (parent, type, mtl) => {
             o.nameID = type;
         }
     });
+}
+
+const mapID = (nameArray) =>{
+    var mappedArray = []
+    nameArray.map((name, index) => (
+        mappedArray.push({childID: name, mtl:INITIAL_MTL})
+    ));
+    return mappedArray;
 }
 
 const ChairMesh = ({newMaterialOpt}) => {
@@ -43,13 +51,15 @@ const ChairMesh = ({newMaterialOpt}) => {
     
     const chair = useRef(theModel)
 
+    
     useEffect(() =>
             void setMaterial(newMaterialOpt.activeOption, newMaterialOpt.newMTL)
         , [newMaterialOpt.newMTL])
 
     useEffect(() => {
+        var mappedArr = mapID(newMaterialOpt.parts);
         if (theModel) {
-            for (let object of INITIAL_MAP) {
+            for (let object of mappedArr) {
                 initColor(theModel, object.childID, object.mtl);
             }
         }
@@ -64,7 +74,7 @@ const ChairMesh = ({newMaterialOpt}) => {
             }
         });
     }
-
+    
     // <primitive/> to provide the created obj to scene
     return <primitive
         ref={chair}
