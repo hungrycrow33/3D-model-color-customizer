@@ -1,4 +1,4 @@
-# Color Customizer: Any 3D model (.gltf files)
+# Color Customizer: Any 3D model (.gltf/.glb files)
 
 Upload gltf file of the model you want to color.
 
